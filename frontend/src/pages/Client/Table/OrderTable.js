@@ -53,7 +53,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 
-export default function OrderTable() {
+export default function ClientOrderTable() {
     const navigate = useNavigate()
     const [orderList, setOrderList] = useState([])
 
@@ -75,11 +75,11 @@ export default function OrderTable() {
             deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
             priority: "upgent"
         },
-        // {
-        //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
-        //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
-        //     priority: "upgent"
-        // },
+        {
+            ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
+            deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
+            priority: "upgent"
+        },
         // {
         //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
         //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
@@ -163,61 +163,6 @@ export default function OrderTable() {
         // mt={10}
 
         >
-
-            < Stack direction="row" alignItems="center" justifyContent="space-between"
-                // mb={1.5}
-                sx={{
-                    // bgcolor: "red", 
-                    // p: 1
-                }}
-            >
-                <Stack
-                    direction={'row'}
-                    alignItems={"center"}
-                    spacing={1}
-                >
-                    <TextField
-                        select
-                        sx={{
-                            width: 200,
-                            ".MuiInputBase-root": { borderRadius: '4px' },
-                            '& > :not(style)': { m: 0 },
-                            "& .MuiInputLabel-root": { fontSize: 15 },
-                            // width: '100%'
-                        }}
-                        label="Select Client"
-                    >
-                        <MenuItem value='Godrej' >Godrej</MenuItem>
-                    </TextField>
-                    <Button size="small"
-                        variant="outlined"
-                        sx={{
-                            // width: 120,
-                            height: "50px",
-                            fontWeight: 400,
-                            textTransform: "uppercase",
-                            // borderRadius: 8,
-                            letterSpacing: 0.4
-                        }}
-                    >
-                        view profile
-                    </Button>
-                </Stack>
-                <Button size="small"
-                    variant="outlined"
-                    sx={{
-                        // width: 120,
-                        height: "50px",
-                        fontWeight: 400,
-                        textTransform: "uppercase",
-                        // borderRadius: 8,
-                        letterSpacing: 0.4
-                    }}
-                // type="submit"
-                >
-                    create job card
-                </Button>
-            </Stack>
             <Grid container>
                 <Grid item xs={12} md={12} lg={12}>
                     <Card
@@ -263,7 +208,7 @@ export default function OrderTable() {
                                                             {/* {ip} */}
                                                             <Chip label={ip}
                                                                 variant="outlined"
-                                                                onClick={() => navigate("/pre-press/details")}
+                                                                onClick={() => navigate("/client/details")}
                                                             />
                                                         </TableCell>
                                                         <TableCell align="left">

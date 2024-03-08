@@ -16,10 +16,16 @@ export default function Sidebar({ drawerOpen, drawerToggle, window }) {
     // console.log(container)
 
     const navConfig = [
+        // {
+        //     title: 'CLIENT & ORDERS',
+        //     path: '/pre-press/order',
+        //     icon: "mingcute:group-3-line"
+        // },
         {
-            title: 'CLIENT & ORDERS',
-            path: '/pre-press/order',
-            icon: "mingcute:group-3-line"
+            title: 'ORDERS',
+            path: '/client/order',
+            icon: "lets-icons:order"
+            // icon: "lets-icons:order-light"
         },
         {
             title: 'HELP',
