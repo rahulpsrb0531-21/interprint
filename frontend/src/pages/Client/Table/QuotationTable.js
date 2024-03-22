@@ -5,19 +5,18 @@ import { filter, set } from 'lodash'
 import {
     Card, Table, Stack, Button, TableRow, MenuItem, TableBody, TableCell, Typography,
     TableContainer, TablePagination, Box, Grid,
-    CardContent, TextField, Chip
+    CardContent, TextField, Chip, Container
 } from '@mui/material'
-import TableHeadComponent from "./TableHead"
-import TableListToolbar from "./TableListToolbar"
+import { UserListHead, UserListToolbar } from "../../../sections/@dashboard/user"
 import SearchNotFound from "../../../components/SearchNotFound"
+import clientServices from "../../../services/clientServices"
+import { useSelector } from "react-redux"
 
 const TABLE_HEAD = [
-    { id: 'ipNumber', label: 'ip Number', alignRight: false },
-    { id: 'orderDate', label: 'order Date', alignRight: false },
-    { id: 'productName', label: 'Product Name', alignRight: false },
-    { id: 'deliveryDate', label: 'Delivery Date', alignRight: false },
+    { id: 'name', label: 'Name', alignRight: false },
+    { id: 'note', label: 'Note', alignRight: false },
+    { id: 'amount', label: 'Amount', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
-    { id: 'priority', label: 'Priority', alignRight: false }
 ]
 
 // ----------------------------------------------------------------------
@@ -53,9 +52,10 @@ function applySortFilter(array, comparator, query) {
 }
 
 
-export default function OrderTable() {
+export default function QuotationTable() {
     const navigate = useNavigate()
-    const [orderList, setOrderList] = useState([])
+    const [quotationList, setQuotationList] = useState([])
+    const { user } = useSelector((state) => state.auth)
 
     const [page, setPage] = useState(0)
 
@@ -75,11 +75,11 @@ export default function OrderTable() {
             deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
             priority: "upgent"
         },
-        // {
-        //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
-        //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
-        //     priority: "upgent"
-        // },
+        {
+            ip: "IP577", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
+            deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
+            priority: "upgent"
+        },
         // {
         //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
         //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
@@ -95,27 +95,27 @@ export default function OrderTable() {
     // const [open, setOpen] = useState(false)
     // const [id, setId] = useState('')
 
-    // useEffect(() => {
-    //     getAllJob()
-    // }, [])
+    useEffect(() => {
+        getQuotationList()
+    }, [])
 
-    // async function getAllJob() {
-    //     const res = await jobServices.getJobs()
-    //     if (res && res.success) {
-    //         console.log("res", res?.data)
-    //         setJobs(res?.data)
-    //     }
-    // }
+    async function getQuotationList() {
+        const res = await clientServices.getQuotation(user?._id)
+        if (res && res.success) {
+            console.log("res", res?.data)
+            setQuotationList(res?.data)
+        }
+    }
 
-    const handleRequestSort = (event, orderList) => {
-        const isAsc = orderBy === orderList && order === 'asc';
+    const handleRequestSort = (event, quotationList) => {
+        const isAsc = orderBy === quotationList && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(orderList);
+        setOrderBy(quotationList);
     };
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = orderList.map((n) => n.orderName);
+            const newSelecteds = quotationList.map((n) => n.orderName);
             setSelected(newSelecteds);
             return;
         }
@@ -151,74 +151,15 @@ export default function OrderTable() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orderList.length) : 0
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - quotationList.length) : 0
 
-    const filteredOrders = applySortFilter(orderList, getComparator(order, orderBy), filterName)
+    const filteredQuotation = applySortFilter(quotationList, getComparator(order, orderBy), filterName)
 
-    const isUserNotFound = filteredOrders.length === 0;
+    const isUserNotFound = filteredQuotation.length === 0;
 
     return (
-        <Box
-        // sx={{ m: 0, mt: 2.3 }}
-        // mt={10}
-
-        >
-
-            < Stack direction="row" alignItems="center" justifyContent="space-between"
-                // mb={1.5}
-                sx={{
-                    // bgcolor: "red", 
-                    // p: 1
-                }}
-            >
-                <Stack
-                    direction={'row'}
-                    alignItems={"center"}
-                    spacing={1}
-                >
-                    <TextField
-                        select
-                        sx={{
-                            width: 200,
-                            ".MuiInputBase-root": { borderRadius: '4px' },
-                            '& > :not(style)': { m: 0 },
-                            "& .MuiInputLabel-root": { fontSize: 15 },
-                            // width: '100%'
-                        }}
-                        label="Select Client"
-                    >
-                        <MenuItem value='Godrej' >Godrej</MenuItem>
-                    </TextField>
-                    <Button size="small"
-                        variant="outlined"
-                        sx={{
-                            // width: 120,
-                            height: "50px",
-                            fontWeight: 400,
-                            textTransform: "uppercase",
-                            // borderRadius: 8,
-                            letterSpacing: 0.4
-                        }}
-                        onClick={() => navigate("/pre-press/client-details")}
-                    >
-                        view profile
-                    </Button>
-                </Stack>
-                <Button size="small"
-                    variant="outlined"
-                    sx={{
-                        // width: 120,
-                        height: "50px",
-                        fontWeight: 400,
-                        textTransform: "uppercase",
-                        // borderRadius: 8,
-                        letterSpacing: 0.4
-                    }}
-                // type="submit"
-                >
-                    create job card
-                </Button>
-            </Stack>
+        <Container maxWidth="lg">
+            <Typography sx={{ pb: 2, fontSize: 28, fontWeight: 700 }} >Quotation Lists</Typography>
             <Grid container>
                 <Grid item xs={12} md={12} lg={12}>
                     <Card
@@ -226,10 +167,10 @@ export default function OrderTable() {
                             height: "auto",
                             boxShadow: "0px 2px 6px #0000000A",
                             borderRadius: 0,
-                            // width: '100%'
+                            width: '78vw',
                         }}
                     >
-                        <TableListToolbar
+                        <UserListToolbar
                             numSelected={selected.length}
                             filterName={filterName}
                             onFilterName={handleFilterByName}
@@ -238,7 +179,7 @@ export default function OrderTable() {
                         <CardContent sx={{ padding: 0 }}>
                             <TableContainer>
                                 <Table>
-                                    <TableHeadComponent
+                                    <UserListHead
                                         columns={TABLE_HEAD}
                                     // order={order}
                                     // orderBy={orderBy}
@@ -249,40 +190,39 @@ export default function OrderTable() {
                                     // onSelectAllClick={handleSelectAllClick}
                                     />
                                     <TableBody>
-                                        {fakeData
+                                        {filteredQuotation
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row, i) => {
-                                                const { ip,
-                                                    orderDate,
-                                                    productName,
-                                                    deliveryDate,
-                                                    status,
-                                                    priority } = row
+                                                const { enquiry, note, amount, status } = row
                                                 return (
-                                                    <TableRow hover sx={{ cursor: 'pointer' }} tabIndex={-1}>
-                                                        <TableCell align="left">
-                                                            {/* {ip} */}
+                                                    <TableRow hover sx={{ cursor: 'pointer' }} tabIndex={-1}
+                                                        onClick={() => navigate(`/client/quotation/${enquiry?.firstName}/details`, { state: row })}
+                                                    >
+                                                        {/* <TableCell align="left">
                                                             <Chip label={ip}
                                                                 variant="outlined"
-                                                                onClick={() => navigate("/pre-press/details")}
+                                                                onClick={() => navigate("/client/details")}
                                                             />
+                                                        </TableCell> */}
+                                                        <TableCell align="left">
+                                                            {enquiry?.firstName}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {orderDate}
+                                                            {note}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {productName}
-                                                        </TableCell>
-                                                        <TableCell align="left">
-                                                            {deliveryDate}
+                                                            {amount}
                                                         </TableCell>
                                                         <TableCell align="left">
                                                             {status}
                                                         </TableCell>
-                                                        <TableCell align="left">
-                                                            {/* {priority} */}
-                                                            <Chip label={priority} color="error" />
+                                                        {/* <TableCell align="left">
+                                                            {status}
                                                         </TableCell>
+                                                        <TableCell align="left">
+                                                            {priority}
+                                                            <Chip label={priority} color="error" />
+                                                        </TableCell> */}
                                                     </TableRow>
                                                 )
                                             })}
@@ -308,7 +248,7 @@ export default function OrderTable() {
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
                             component="div"
-                            count={orderList.length}
+                            count={quotationList.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
@@ -317,6 +257,6 @@ export default function OrderTable() {
                     </Card>
                 </Grid>
             </Grid>
-        </Box>
+        </Container>
     )
 }

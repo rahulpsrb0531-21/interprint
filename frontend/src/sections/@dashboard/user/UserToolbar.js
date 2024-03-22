@@ -34,7 +34,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-AdminListToolbar.propTypes = {
+UserListToolbar.propTypes = {
     numSelected: PropTypes.number,
     filterName: PropTypes.string,
     onFilterName: PropTypes.func,
@@ -50,7 +50,7 @@ Iconify.propTypes = {
     icon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
-export default function AdminListToolbar({ numSelected, filterName, onFilterName, placeholder }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName, placeholder }) {
     return (
         <StyledRoot
             sx={{

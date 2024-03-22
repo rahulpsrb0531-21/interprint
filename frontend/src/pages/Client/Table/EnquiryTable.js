@@ -5,19 +5,18 @@ import { filter, set } from 'lodash'
 import {
     Card, Table, Stack, Button, TableRow, MenuItem, TableBody, TableCell, Typography,
     TableContainer, TablePagination, Box, Grid,
-    CardContent, TextField, Chip
+    CardContent, TextField, Chip, Container
 } from '@mui/material'
-import TableHeadComponent from "./TableHead"
-import TableListToolbar from "./TableListToolbar"
+import { UserListHead, UserListToolbar } from "../../../sections/@dashboard/user"
 import SearchNotFound from "../../../components/SearchNotFound"
+import clientServices from "../../../services/clientServices"
+import { useSelector } from "react-redux"
 
 const TABLE_HEAD = [
-    { id: 'ipNumber', label: 'ip Number', alignRight: false },
-    { id: 'orderDate', label: 'order Date', alignRight: false },
-    { id: 'productName', label: 'Product Name', alignRight: false },
-    { id: 'deliveryDate', label: 'Delivery Date', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
-    { id: 'priority', label: 'Priority', alignRight: false }
+    { id: 'firstName', label: 'First Name', alignRight: false },
+    { id: 'lastName', label: 'Last Name', alignRight: false },
+    { id: 'email', label: 'Email', alignRight: false },
+    { id: 'phone', label: 'Phone', alignRight: false },
 ]
 
 // ----------------------------------------------------------------------
@@ -53,10 +52,11 @@ function applySortFilter(array, comparator, query) {
 }
 
 
-export default function OrderTable() {
+export default function EnquiryTable() {
     const navigate = useNavigate()
-    const [orderList, setOrderList] = useState([])
-
+    const [enquiryList, setEnquiryList] = useState([])
+    const { user } = useSelector((state) => state.auth)
+    console.log("user?.email", user?.email)
     const [page, setPage] = useState(0)
 
     const [order, setOrder] = useState('asc')
@@ -69,53 +69,32 @@ export default function OrderTable() {
 
     const [rowsPerPage, setRowsPerPage] = useState(5)
 
-    const fakeData = [
-        {
-            ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
-            deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
-            priority: "upgent"
-        },
-        // {
-        //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
-        //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
-        //     priority: "upgent"
-        // },
-        // {
-        //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
-        //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
-        //     priority: "upgent"
-        // },
-        // {
-        //     ip: "IP576", orderDate: "01/01/2024", productName: "chat Masala 50g Mono",
-        //     deliveryDate: "03/01/2024, 07/01/2024, 11/01/2024", status: "Printing",
-        //     priority: "upgent"
-        // },
-    ]
+    useEffect(() => {
+        if (user?.email) {
+            getAllEnquiryByUserId()
+        }
+    }, [])
 
-    // const [open, setOpen] = useState(false)
-    // const [id, setId] = useState('')
+    async function getAllEnquiryByUserId() {
+        const data = {
+            email: user?.email
+        }
+        const res = await clientServices.getAllEnquiryByUserId(data)
+        if (res && res.success) {
+            console.log("res", res?.data)
+            setEnquiryList(res?.data)
+        }
+    }
 
-    // useEffect(() => {
-    //     getAllJob()
-    // }, [])
-
-    // async function getAllJob() {
-    //     const res = await jobServices.getJobs()
-    //     if (res && res.success) {
-    //         console.log("res", res?.data)
-    //         setJobs(res?.data)
-    //     }
-    // }
-
-    const handleRequestSort = (event, orderList) => {
-        const isAsc = orderBy === orderList && order === 'asc';
+    const handleRequestSort = (event, enquiryList) => {
+        const isAsc = orderBy === enquiryList && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(orderList);
+        setOrderBy(enquiryList);
     };
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = orderList.map((n) => n.orderName);
+            const newSelecteds = enquiryList.map((n) => n.orderName);
             setSelected(newSelecteds);
             return;
         }
@@ -151,74 +130,15 @@ export default function OrderTable() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orderList.length) : 0
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - enquiryList.length) : 0
 
-    const filteredOrders = applySortFilter(orderList, getComparator(order, orderBy), filterName)
+    const filteredEnquiry = applySortFilter(enquiryList, getComparator(order, orderBy), filterName)
 
-    const isUserNotFound = filteredOrders.length === 0;
+    const isUserNotFound = filteredEnquiry.length === 0;
 
     return (
-        <Box
-        // sx={{ m: 0, mt: 2.3 }}
-        // mt={10}
-
-        >
-
-            < Stack direction="row" alignItems="center" justifyContent="space-between"
-                // mb={1.5}
-                sx={{
-                    // bgcolor: "red", 
-                    // p: 1
-                }}
-            >
-                <Stack
-                    direction={'row'}
-                    alignItems={"center"}
-                    spacing={1}
-                >
-                    <TextField
-                        select
-                        sx={{
-                            width: 200,
-                            ".MuiInputBase-root": { borderRadius: '4px' },
-                            '& > :not(style)': { m: 0 },
-                            "& .MuiInputLabel-root": { fontSize: 15 },
-                            // width: '100%'
-                        }}
-                        label="Select Client"
-                    >
-                        <MenuItem value='Godrej' >Godrej</MenuItem>
-                    </TextField>
-                    <Button size="small"
-                        variant="outlined"
-                        sx={{
-                            // width: 120,
-                            height: "50px",
-                            fontWeight: 400,
-                            textTransform: "uppercase",
-                            // borderRadius: 8,
-                            letterSpacing: 0.4
-                        }}
-                        onClick={() => navigate("/pre-press/client-details")}
-                    >
-                        view profile
-                    </Button>
-                </Stack>
-                <Button size="small"
-                    variant="outlined"
-                    sx={{
-                        // width: 120,
-                        height: "50px",
-                        fontWeight: 400,
-                        textTransform: "uppercase",
-                        // borderRadius: 8,
-                        letterSpacing: 0.4
-                    }}
-                // type="submit"
-                >
-                    create job card
-                </Button>
-            </Stack>
+        <Container maxWidth="lg">
+            <Typography sx={{ pb: 2, fontSize: 28, fontWeight: 700 }} >Enquiry Lists</Typography>
             <Grid container>
                 <Grid item xs={12} md={12} lg={12}>
                     <Card
@@ -226,10 +146,10 @@ export default function OrderTable() {
                             height: "auto",
                             boxShadow: "0px 2px 6px #0000000A",
                             borderRadius: 0,
-                            // width: '100%'
+                            width: '78vw',
                         }}
                     >
-                        <TableListToolbar
+                        <UserListToolbar
                             numSelected={selected.length}
                             filterName={filterName}
                             onFilterName={handleFilterByName}
@@ -238,7 +158,7 @@ export default function OrderTable() {
                         <CardContent sx={{ padding: 0 }}>
                             <TableContainer>
                                 <Table>
-                                    <TableHeadComponent
+                                    <UserListHead
                                         columns={TABLE_HEAD}
                                     // order={order}
                                     // orderBy={orderBy}
@@ -249,39 +169,23 @@ export default function OrderTable() {
                                     // onSelectAllClick={handleSelectAllClick}
                                     />
                                     <TableBody>
-                                        {fakeData
+                                        {filteredEnquiry
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row, i) => {
-                                                const { ip,
-                                                    orderDate,
-                                                    productName,
-                                                    deliveryDate,
-                                                    status,
-                                                    priority } = row
+                                                const { firstName, lastName, email, phone } = row
                                                 return (
                                                     <TableRow hover sx={{ cursor: 'pointer' }} tabIndex={-1}>
                                                         <TableCell align="left">
-                                                            {/* {ip} */}
-                                                            <Chip label={ip}
-                                                                variant="outlined"
-                                                                onClick={() => navigate("/pre-press/details")}
-                                                            />
+                                                            {firstName}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {orderDate}
+                                                            {lastName}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {productName}
+                                                            {email}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {deliveryDate}
-                                                        </TableCell>
-                                                        <TableCell align="left">
-                                                            {status}
-                                                        </TableCell>
-                                                        <TableCell align="left">
-                                                            {/* {priority} */}
-                                                            <Chip label={priority} color="error" />
+                                                            {phone}
                                                         </TableCell>
                                                     </TableRow>
                                                 )
@@ -293,7 +197,7 @@ export default function OrderTable() {
                                         )}
                                     </TableBody>
 
-                                    {/* {isUserNotFound && (
+                                    {isUserNotFound && (
                                         <TableBody>
                                             <TableRow>
                                                 <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -301,14 +205,14 @@ export default function OrderTable() {
                                                 </TableCell>
                                             </TableRow>
                                         </TableBody>
-                                    )} */}
+                                    )}
                                 </Table>
                             </TableContainer>
                         </CardContent>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
                             component="div"
-                            count={orderList.length}
+                            count={enquiryList.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
@@ -317,6 +221,6 @@ export default function OrderTable() {
                     </Card>
                 </Grid>
             </Grid>
-        </Box>
+        </Container>
     )
 }

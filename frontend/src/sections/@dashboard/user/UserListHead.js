@@ -2,7 +2,7 @@
 import React from 'react';
 import { TableCell, TableHead, TableRow } from '@mui/material';
 
-const TableHeadComponent = ({ columns }) => {
+const UserListHead = ({ columns }) => {
     return (
         <TableHead>
             <TableRow>
@@ -14,4 +14,4 @@ const TableHeadComponent = ({ columns }) => {
     );
 };
 
-export default TableHeadComponent;
+export default UserListHead

@@ -35,7 +35,7 @@ export default function Header({ handleLeftDrawerToggle }) {
                     }} >Interprint</Typography>
                 </Box>
 
-                <ButtonBase sx={{
+                {/* <ButtonBase sx={{
                     borderRadius: '12px', overflow: 'hidden'
                 }}>
                     <Avatar
@@ -56,7 +56,7 @@ export default function Header({ handleLeftDrawerToggle }) {
                     >
                         <Iconify icon={"material-symbols-light:menu"} />
                     </Avatar>
-                </ButtonBase>
+                </ButtonBase> */}
             </Stack>
             <ProfilePopover />
         </Stack>

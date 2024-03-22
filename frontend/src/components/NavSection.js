@@ -181,7 +181,7 @@ export default function NavSection({ navConfig, ...other }) {
   const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
 
   return (
-    <List sx={{ pl: 2 }} >
+    <List sx={{ p: 1 }} >
       {navConfig.map((item) => (
         <NavItem key={item.title} item={item} active={match} />
       ))
