@@ -152,8 +152,7 @@ export default function CreateQuotationAndClient() {
     }
 
     const handleDateChange = (date) => {
-        setSelectedDate(date);
-        // Additional logic to handle date change
+        setSelectedDate(date)
     };
 
     return (
