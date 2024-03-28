@@ -15,8 +15,8 @@ export default function ClientLogin() {
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.auth)
     const token = localStorage.getItem('access')
-    console.log("token", token)
-    console.log("user", user)
+    // console.log("token", token)
+    // console.log("user", user)
     const [showPassword, setShowPassword] = useState(false)
     // const user = JSON.parse(localStorage.getItem('user'))
 
@@ -54,7 +54,6 @@ export default function ClientLogin() {
     } = formik
 
     async function login(data) {
-        const role = (values?.role).toLocaleLowerCase()
         const res = await authServices.login("client", data)
         // console.log("res>>>>>>>>", res)
         // setSubmitting(false)

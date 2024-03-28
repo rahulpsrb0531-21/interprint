@@ -11,6 +11,7 @@ import ClientRouter from './routes/clientRoute.js'
 import AdminRouter from './routes/adminRoute.js'
 import EnquiryRouter from './routes/enquiryRoute.js'
 import SalesRouter from './routes/salesRoute.js'
+import PrepressRouter from './routes/prepressRoute.js'
 const router = express()
 
 /** Connect to Mongo */
@@ -65,6 +66,7 @@ const StartServer = () => {
     router.use("/api/admin", AdminRouter)
     router.use("/api/enquiry", EnquiryRouter)
     router.use("/api/sales", SalesRouter)
+    router.use("/api/prepress", PrepressRouter)
 
     router.listen(config.server.port, () => Logging.info(`Server is running on port ${config.server.port}`))
 };

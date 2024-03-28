@@ -1,12 +1,36 @@
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Iconify from "../../components/Iconify";
+import prepressServices from "../../services/prepressServices";
+import { useSnackbar } from "notistack";
 
 
 export default function EnquiryDetails() {
     const navigate = useNavigate()
+    const { enqueueSnackbar } = useSnackbar()
     const { state } = useLocation()
     console.log('State', state)
+
+    async function createUps() {
+        const data = {
+            enquiry: state
+        }
+        const res = await prepressServices.createUps(data)
+        if (res && res.success) {
+            enqueueSnackbar(res?.message, {
+                variant: "success",
+                anchorOrigin: { horizontal: "right", vertical: "top" },
+                autoHideDuration: 1000
+            })
+            navigate("/sales/enquiry/lists")
+        } else {
+            enqueueSnackbar(res?.data || "server error", {
+                variant: "error",
+                anchorOrigin: { horizontal: "right", vertical: "top" }, autoHideDuration: 1000
+            })
+        }
+    }
+
     return (
         <Stack spacing={4} sx={{ width: "80vw", px: 4 }} >
             {/* company name  */}
@@ -20,7 +44,51 @@ export default function EnquiryDetails() {
                     <Typography sx={{ fontSize: 16, fontWeight: 600 }}>{state?.companyName}</Typography>
                 </Stack>
                 {/* <Box sx={{ textAlign: 'right', width: "100%" }} > */}
-                <Button size="small"
+                {
+                    state?.status === "Pending" ? (
+                        <Button size="small"
+                            variant="outlined"
+                            sx={{
+                                // width: 120,
+                                height: "40px",
+                                fontWeight: 400,
+                                textTransform: "uppercase",
+                                // borderRadius: 8,
+                                letterSpacing: 0.4,
+                                textAlign: "right"
+                            }}
+                            // type="submit"
+                            onClick={() => createUps()}
+                        >
+                            {/* create New Client */}
+                            Sent to Pre press
+                        </Button>
+
+                    ) :
+                        state?.status === "Sent to Prepress" ? (
+                            <></>
+                        )
+                            : (
+                                <Button size="small"
+                                    variant="outlined"
+                                    sx={{
+                                        // width: 120,
+                                        height: "40px",
+                                        fontWeight: 400,
+                                        textTransform: "uppercase",
+                                        // borderRadius: 8,
+                                        letterSpacing: 0.4,
+                                        textAlign: "right"
+                                    }}
+                                    // type="submit"
+                                    onClick={() => navigate('/sales/create/new/client', { state: state })}
+                                >
+                                    {/* create New Client */}
+                                    Make Quotation
+                                </Button>
+                            )
+                }
+                {/* <Button size="small"
                     variant="outlined"
                     sx={{
                         // width: 120,
@@ -34,8 +102,9 @@ export default function EnquiryDetails() {
                     // type="submit"
                     onClick={() => navigate('/sales/create/new/client', { state: state })}
                 >
-                    create New Client
-                </Button>
+                    {/* create New Client */}
+                {/* Make Quotation
+            </Button> */}
                 {/* </Box> */}
             </Stack>
             {/* company details  */}
@@ -104,6 +173,6 @@ export default function EnquiryDetails() {
                 </Grid>
             </Stack>
 
-        </Stack>
+        </Stack >
     )
 }

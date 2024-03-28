@@ -76,6 +76,15 @@ const enquirySchema = mongoose.Schema(
             required: [true, 'Requirements is required'],
             trim: true,
         },
+        ups: { type: String },
+        status: {
+            type: String,
+            enum: ["Pending", "Sent to Prepress", "Ups Updated"]
+        },
+        existenceStatus: {
+            type: String,
+            enum: ["", "New Client", "Client Exist"]
+        },
     },
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 )

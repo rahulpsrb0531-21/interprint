@@ -67,24 +67,6 @@ export default function ClientQuotationDetails() {
             // }}
             >
                 <Typography sx={{ fontSize: 16, fontWeight: 600 }} >Company Name : {state?.enquiry?.companyName}</Typography>
-                {/* <TextField
-                    select
-                    sx={{
-                        ".MuiInputBase-root": { borderRadius: '4px' },
-                        '& > :not(style)': { m: 0 },
-                        "& .MuiInputLabel-root": { fontSize: 15 },
-                        width: 200,
-                        height: "50px"
-                    }}
-                    // label="Years of experience*"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                // {...getFieldProps('experience')} 
-                >
-                    <MenuItem value="Pending" >Pending</MenuItem>
-                    <MenuItem value="Approve" >Approve</MenuItem>
-                    <MenuItem value="Rejected" >Rejected</MenuItem>
-                </TextField> */}
                 <Stack direction={'row'} alignItems={"center"}
                     spacing={1}
                 >
@@ -128,46 +110,56 @@ export default function ClientQuotationDetails() {
 
             {
                 status === "Approve" && (
-                    <Stack spacing={1} >
-                        <Typography sx={{ fontSize: 16, fontWeight: 600 }}
-                        >Upload PO</Typography>
-                        {/* <Stack sx={{
-                            width: 300,
-                            height: 200,
-                            // bgcolor: "#8FD0D0",
-                            border: "1px dashed #8FD0D0",
-                            borderRadius: '4px',
-                        }}
-                            alignItems={'center'}
-                            justifyContent={'center'}
-                        >
-                            <Stack direction={'row'} alignItems={'center'} spacing={1} >
-                                <Iconify icon={"et:upload"} />
-                                <Typography>browse to upload it.</Typography>
-                            </Stack>
-                        </Stack> */}
-                        {/* <div>
+                    <Stack spacing={2} >
+                        <Stack spacing={4} direction={'row'} >
+                            <TextField
+                                sx={{
+                                    ".MuiInputBase-root": { borderRadius: '4px' },
+                                    '& > :not(style)': { m: 0 },
+                                    "& .MuiInputLabel-root": { fontSize: 15 },
+                                    // width: "47%"
+                                }}
+                                label="GST*"
+                            />
+                            <TextField
+                                sx={{
+                                    ".MuiInputBase-root": { borderRadius: '4px' },
+                                    '& > :not(style)': { m: 0 },
+                                    "& .MuiInputLabel-root": { fontSize: 15 },
+                                    // width: "47%"
+                                }}
+                                label="Pan*"
+                            />
+                        </Stack>
+                        {/* Office address  */}
+                        <TextField
+                            multiline={true}
+                            rows={2}
+                            sx={{
+                                ".MuiInputBase-root": { borderRadius: '4px' },
+                                '& > :not(style)': { m: 0 },
+                                "& .MuiInputLabel-root": { fontSize: 15 },
+                                width: "50%"
+                            }}
+                            label="Office Address*"
+                        />
+                        <Stack spacing={1} >
+                            <Typography sx={{ fontSize: 16, fontWeight: 600 }}
+                            >Upload PO</Typography>
                             <div {...getRootProps()} style={dropzoneStyles}>
                                 <input {...getInputProps()} />
-                                {!uploadedImage &&
-                                    <p>Upload Logo</p>
-                                }
+                                {(upload) ? (
+                                    <Typography variant="body1" sx={{ textTransform: 'capitalize' }} >
+                                        {upload || `.pdf`}</Typography>
+                                ) : isDragActive ? (
+                                    <Typography variant="body1">Drop the files here...</Typography>
+                                ) : (
+                                    <Stack alignItems={'center'} justifyContent={'center'} sx={{ height: 50 }}  >
+                                        <Typography sx={{ fontSize: 16 }} >Upload file resume</Typography>
+                                    </Stack>
+                                )}
                             </div>
-                        </div> */}
-                        <div {...getRootProps()} style={dropzoneStyles}>
-                            <input {...getInputProps()} />
-                            {(upload) ? (
-                                <Typography variant="body1" sx={{ textTransform: 'capitalize' }} >
-                                    {upload || `.pdf`}</Typography>
-                            ) : isDragActive ? (
-                                <Typography variant="body1">Drop the files here...</Typography>
-                            ) : (
-                                <Stack alignItems={'center'} justifyContent={'center'} sx={{ height: 50 }}  >
-                                    <Typography sx={{ fontSize: 16 }} >Upload file resume</Typography>
-                                </Stack>
-                            )}
-                        </div>
-
+                        </Stack>
                     </Stack>
                 )
             }

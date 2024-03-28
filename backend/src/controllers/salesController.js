@@ -6,6 +6,8 @@ import Client from "../model/client.js"
 import { clientNav } from "../custom/customNavLinks.js"
 import Quotation from "../model/quotation.js"
 import { sendEmailWithLoginCredential } from "../custom/mail.js"
+import Prepress from "../model/prepress.js"
+import Enquiry from "../model/enquiry.js"
 
 
 // @desc    Login Client
@@ -102,7 +104,59 @@ const createQuotation = async (req, res) => {
         // console.log("1")
         // console.log("2", enquiry, note, date, amount, password)
         if (!enquiry || !note || !date || !amount || !password) throw customError.dataInvalid
+        // first step 1  create client
+        const userExits = await Client.findOne({ email: enquiry.email })
+        if (userExits) throw customError.userExists
+        const newClient = await Client.create({
+            email: enquiry.email,
+            password: password,
+            firstName: enquiry.firstName,
+            lastName: enquiry.lastName,
+            phone: enquiry.phone,
+            companyName: enquiry.companyName,
+            street: enquiry.companyAddress.street,
+            city: enquiry.companyAddress.city,
+            state: enquiry.companyAddress.state,
+            zip: enquiry.companyAddress.zip,
+            country: enquiry.companyAddress.country,
+            requirements: enquiry.requirements,
+            navConfig: clientNav
+        })
 
+        const newQuotation = Quotation({
+            enquiry: newClient,
+            note,
+            date,
+            amount
+        })
+
+        await newQuotation.save()
+        sendEmailWithLoginCredential(enquiry.email, password)
+
+        res.status(200).json({
+            success: true,
+            data: newQuotation,
+            message: 'Created Quotation successfully',
+        })
+
+    } catch (error) {
+        console.log(`***** ERROR : ${req.originalUrl, error} error`);
+        res.status(200).json({
+            success: false,
+            // data: error,
+            data: error,
+        });
+    }
+}
+// @desc    Create Quotation with Existing client
+// @route   POST /api/sales/create/quotation
+// @access  Private
+const createQuotationWithExistClient = async (req, res) => {
+    try {
+        const { enquiry, note, date, amount, password } = req.body
+        // console.log("1")
+        // console.log("2", enquiry, note, date, amount, password)
+        if (!enquiry || !note || !date || !amount || !password) throw customError.dataInvalid
         // first step 1  create client
         const userExits = await Client.findOne({ email: enquiry.email })
         if (userExits) throw customError.userExists
@@ -188,4 +242,49 @@ const getAllClient = async (req, res) => {
     }
 }
 
-export { Login, registerClient, createQuotation, getAllQuotation, getAllClient }
+// @desc    Create Ups 
+// @route   POST /api/sales/ups/create
+// @access  Private
+const createUps = async (req, res) => {
+    try {
+        const { enquiry } = req.body
+        // console.log("1")
+        // console.log("2", enquiry)
+        if (!enquiry) throw customError.dataInvalid
+
+        // // first step 1  create client
+        // const userExits = await Enquiry.findOne({ email: enquiry.email })
+        // console.log("2", userExits)
+        // if (userExits) throw customError.userExists
+
+        const newUps = Prepress({
+            enquiry,
+            status: "Pending"
+        })
+        await newUps.save()
+
+        const updateEnquiry = await Enquiry.findOneAndUpdate(
+            { email: enquiry.email },
+            { $set: { status: "Sent to Prepress" } },
+            { new: true }
+        )
+
+        // sendEmailWithLoginCredential(enquiry.email, password)
+
+        res.status(200).json({
+            success: true,
+            data: newUps,
+            message: 'Created Ups successfully',
+        })
+
+    } catch (error) {
+        console.log(`***** ERROR : ${req.originalUrl, error} error`);
+        res.status(200).json({
+            success: false,
+            // data: error,
+            data: error,
+        });
+    }
+}
+
+export { Login, registerClient, createQuotation, getAllQuotation, getAllClient, createUps }

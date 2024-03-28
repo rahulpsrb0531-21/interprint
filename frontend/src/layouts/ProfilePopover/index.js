@@ -16,7 +16,7 @@ export default function ProfilePopover() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.auth)
-    console.log("user", user)
+    // console.log("user", user)
     const anchorRef = useRef(null)
     const [open, setOpen] = useState(false)
     // console.log(user)

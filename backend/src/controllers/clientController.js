@@ -14,8 +14,10 @@ const Login = async (req, res) => {
     try {
         const { email, password } = req.body
         if (!email || !password) throw customError.dataInvalid
+        // console.log("email, password", email, password)
 
         let userExits = await Client.findOne({ email })
+        console.log(userExits)
         if (!userExits) throw customError.userNotExists
 
         if (userExits && (await userExits.matchPassword(password))) {

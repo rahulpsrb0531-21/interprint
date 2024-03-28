@@ -20,6 +20,7 @@ const TABLE_HEAD = [
     { id: 'email', label: 'Email', alignRight: false },
     { id: 'companyName', label: 'Company Name', alignRight: false },
     { id: 'phone', label: 'Phone', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
 ]
 
 // ----------------------------------------------------------------------
@@ -175,7 +176,7 @@ export default function EnquiryTable() {
                                         {filteredEnquiry
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row, i) => {
-                                                const { firstName, lastName, email, companyName, phone } = row
+                                                const { firstName, lastName, email, companyName, phone, status } = row
                                                 return (
                                                     <TableRow hover sx={{ cursor: 'pointer' }}
                                                         onClick={() => navigate(`/sales/enquiry/${firstName}/details`, { state: row })}
@@ -195,6 +196,9 @@ export default function EnquiryTable() {
                                                         </TableCell>
                                                         <TableCell align="left">
                                                             {phone}
+                                                        </TableCell>
+                                                        <TableCell align="left">
+                                                            {status}
                                                         </TableCell>
                                                     </TableRow>
                                                 )

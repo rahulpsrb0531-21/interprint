@@ -1,12 +1,9 @@
 import { useRoutes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
-import OrderTable from './pages/PrePress/Table/OrderTable'
-import Details from './pages/PrePress/Details'
 import Login from './pages/Auth/login'
 import ClientEnquiryTable from './pages/Client/Table/EnquiryTable'
 import ClientQuotationTable from './pages/Client/Table/QuotationTable'
 // import ClientDetails from './pages/Client/Details'
-import ClientProfileDetails from './pages/PrePress/Details/ClientProfileDetails'
 import EnquiryForm from './pages/EnquiryForm'
 import EnquiryTable from './pages/Sales/Table/EnquiryTable'
 import EnquiryDetails from './pages/Sales/EnquiryDetails'
@@ -17,6 +14,8 @@ import CreateQuotationAndClient from './pages/Sales/CreateQuotationAndClient'
 import QuotationTable from './pages/Sales/Table/QuotationTable'
 import ThankYouPage from './pages/ThankYouPage'
 import ClientLogin from './pages/Auth/Client/login'
+import PrepressEnquiryTable from './pages/PrePress/Table/PrepressEnquiryTable'
+import PrepressEnquiryDetails from './pages/PrePress/Table/PrepressEnquiryDetails'
 
 
 export default function Router() {
@@ -53,9 +52,9 @@ export default function Router() {
             path: '/pre-press',
             element: < MainLayout />,
             children: [
-                { path: 'order', element: <OrderTable /> },
-                { path: 'details', element: <Details /> },
-                { path: 'client-details', element: <ClientProfileDetails /> },
+                { path: 'enquiry', element: <PrepressEnquiryTable /> },
+                { path: 'enquiry/:name/details', element: <PrepressEnquiryDetails /> },
+                // { path: 'client-details', element: <ClientProfileDetails /> },
             ]
 
         },

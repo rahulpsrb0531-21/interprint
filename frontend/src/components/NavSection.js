@@ -39,7 +39,7 @@ function NavItem({ item, active }) {
   const isActiveRoot = active(item.path);
 
   const { title, path, icon, children } = item;
-  console.log("fd", path)
+  // console.log("fd", path)
 
   const [open, setOpen] = useState(isActiveRoot);
 

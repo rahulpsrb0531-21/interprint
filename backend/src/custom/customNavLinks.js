@@ -36,16 +36,11 @@ const salesNav = [
     // },
 ]
 
-const prePresNav = [
+const prePressNav = [
     {
-        title: 'CLIENT & ORDERS',
-        path: '/pre-press/order',
-        icon: "mingcute:group-3-line"
-    },
-    {
-        title: 'HELP',
-        path: '/help',
-        icon: "octicon:question-24"
+        title: 'Enquiry',
+        path: '/client/enquiry/lists',
+        icon: "lets-icons:order"
     },
 ]
 
@@ -57,4 +52,4 @@ const adminNav = [
     },
 ]
 
-export { clientNav, salesNav, prePresNav, adminNav }
+export { clientNav, salesNav, prePressNav, adminNav }

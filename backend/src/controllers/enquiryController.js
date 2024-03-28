@@ -10,7 +10,6 @@ const createEnquiry = async (req, res) => {
         const {
             firstName, lastName, email, phone, companyName,
             companyAddress, requirements } = req.body
-        console.log("sdlsfjk;")
         const newEnquiry = await Enquiry.create({
             firstName,
             lastName,
@@ -18,7 +17,10 @@ const createEnquiry = async (req, res) => {
             phone,
             companyName,
             companyAddress,
-            requirements
+            requirements,
+            status: "Pending",
+            ups: "",
+            existenceStatus: ""
         })
 
         res.status(200).json({
