@@ -16,6 +16,7 @@ import ThankYouPage from './pages/ThankYouPage'
 import ClientLogin from './pages/Auth/Client/login'
 import PrepressEnquiryTable from './pages/PrePress/Table/PrepressEnquiryTable'
 import PrepressEnquiryDetails from './pages/PrePress/Table/PrepressEnquiryDetails'
+import CreateEnquiry from './pages/Client/CreateEnquiry'
 
 
 export default function Router() {
@@ -28,7 +29,7 @@ export default function Router() {
                 { path: 'enquiry/lists', element: <ClientEnquiryTable /> },
                 { path: 'quotation/lists', element: <ClientQuotationTable /> },
                 { path: 'quotation/:name/details', element: <ClientQuotationDetails /> },
-                { path: 'create/new/client', element: <CreateQuotationAndClient /> },
+                { path: 'create/new/enquiy', element: <CreateEnquiry /> },
             ]
 
         },
@@ -52,9 +53,8 @@ export default function Router() {
             path: '/pre-press',
             element: < MainLayout />,
             children: [
-                { path: 'enquiry', element: <PrepressEnquiryTable /> },
+                { path: 'enquiry/lists', element: <PrepressEnquiryTable /> },
                 { path: 'enquiry/:name/details', element: <PrepressEnquiryDetails /> },
-                // { path: 'client-details', element: <ClientProfileDetails /> },
             ]
 
         },

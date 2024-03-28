@@ -18,7 +18,6 @@ export default function PrepressEnquiryDetails() {
     async function updateUps() {
         const data = {
             id: state?.enquiry?._id,
-            email: state?.enquiry?.email,
             ups: upsValue
         }
         const res = await prepressServices.updateUps(data)
@@ -28,7 +27,7 @@ export default function PrepressEnquiryDetails() {
                 anchorOrigin: { horizontal: "right", vertical: "top" },
                 autoHideDuration: 1000
             })
-            navigate("/pre-press/enquiry")
+            navigate("/pre-press/enquiry/lists")
         } else {
             enqueueSnackbar(res?.data || "server error", {
                 variant: "error",

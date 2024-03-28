@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import customError from "../custom/customError.js"
 import Enquiry from "../model/enquiry.js"
+import Client from "../model/client.js"
 
 // @desc    Create a Enquiry
 // @route   POST /api/enquiry/create
@@ -10,6 +11,9 @@ const createEnquiry = async (req, res) => {
         const {
             firstName, lastName, email, phone, companyName,
             companyAddress, requirements } = req.body
+        let userExits = await Client.findOne({ email })
+        // console.log(userExits)
+        if (userExits) throw customError.userExists
         const newEnquiry = await Enquiry.create({
             firstName,
             lastName,
@@ -20,7 +24,6 @@ const createEnquiry = async (req, res) => {
             requirements,
             status: "Pending",
             ups: "",
-            existenceStatus: ""
         })
 
         res.status(200).json({

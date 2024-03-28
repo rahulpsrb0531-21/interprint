@@ -101,7 +101,7 @@ export default function ClientQuotationDetails() {
                 </Stack>
             </Stack>
             <Typography sx={{ fontSize: 16, fontWeight: 600 }} >Amount : {state?.amount}</Typography>
-            <Stack>
+            <Stack direction={'row'} spacing={0.5} >
                 <Typography sx={{ fontSize: 16, fontWeight: 600 }} >Note :</Typography>
                 <Box sx={{ width: "60%" }} >
                     <Typography sx={{ fontSize: 14, fontWeight: 500 }} >{state?.note}</Typography>

@@ -11,35 +11,25 @@ const clientNav = [
         path: '/client/quotation/lists',
         icon: "lets-icons:order"
     },
-    // {
-    //     title: 'HELP',
-    //     path: '/help',
-    //     icon: "octicon:question-24"
-    // },
 ]
 
 const salesNav = [
     {
         title: 'Enquiry',
-        path: '/enquiry/lists',
+        path: '/sales/enquiry/lists',
         icon: "tdesign:list"
     },
     {
         title: 'Client',
-        path: '/client/lists',
+        path: '/sales/client/lists',
         icon: "mingcute:group-3-line"
     },
-    // {
-    //     title: 'HELP',
-    //     path: '/help',
-    //     icon: "octicon:question-24"
-    // },
 ]
 
 const prePressNav = [
     {
         title: 'Enquiry',
-        path: '/client/enquiry/lists',
+        path: '/pre-press/enquiry/lists',
         icon: "lets-icons:order"
     },
 ]

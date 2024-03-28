@@ -17,7 +17,7 @@ const Login = async (req, res) => {
         // console.log("email, password", email, password)
 
         let userExits = await Client.findOne({ email })
-        console.log(userExits)
+        // console.log(userExits)
         if (!userExits) throw customError.userNotExists
 
         if (userExits && (await userExits.matchPassword(password))) {
@@ -45,13 +45,14 @@ const Login = async (req, res) => {
 }
 
 // @desc    Get All Quotation By Client Id 
-// @route   GET /api/client/quotation/:id
+// @route   GET /api/client/quotation/:email
 // @access  Private
 const getQuotation = async (req, res) => {
     try {
-        // const _id = req.params.id
-        const _Id = new Types.ObjectId(req.params.id)
-        const quotations = await Quotation.find({ "enquiry._id": _Id })
+        const email = req.params.email
+        // const _Id = new Types.ObjectId(req.params.id)
+        // const quotations = await Quotation.find({ "enquiry._id": _Id })
+        const quotations = await Quotation.find({ "enquiry.email": email })
         res.status(200).json({
             success: true,
             data: quotations,
@@ -92,4 +93,32 @@ const getAllEnquiryByClientEmailId = async (req, res) => {
 }
 
 
-export { Login, getQuotation, getAllEnquiryByClientEmailId }
+// @desc    Check By Email Id Client Exist
+// @route   GET /api/client/existence/:email
+// @access  Private
+const checkByEmailIdClientExist = async (req, res) => {
+    try {
+        const email = req.params.email
+        // console.log(email)
+
+        let userExits = await Client.findOne({ email })
+        // console.log(userExits)
+        if (!userExits) throw customError.userNotExists
+
+        res.status(200).json({
+            success: true,
+            existence: true,
+            message: 'successfully',
+        })
+    } catch (error) {
+        console.log(`***** ERROR: ${req.originalUrl, error} error`)
+        res.status({
+            success: false,
+            data: error
+        })
+    }
+}
+
+
+
+export { Login, getQuotation, getAllEnquiryByClientEmailId, checkByEmailIdClientExist }

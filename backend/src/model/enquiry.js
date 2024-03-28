@@ -80,11 +80,7 @@ const enquirySchema = mongoose.Schema(
         status: {
             type: String,
             enum: ["Pending", "Sent to Prepress", "Ups Updated"]
-        },
-        existenceStatus: {
-            type: String,
-            enum: ["", "New Client", "Client Exist"]
-        },
+        }
     },
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 )

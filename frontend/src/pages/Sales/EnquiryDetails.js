@@ -66,7 +66,17 @@ export default function EnquiryDetails() {
 
                     ) :
                         state?.status === "Sent to Prepress" ? (
-                            <></>
+                            <Typography
+                                sx={{
+                                    bgcolor: 'green',
+                                    height: "30px",
+                                    width: 80,
+                                    fontWeight: 400,
+                                    textAlign: 'center',
+                                    borderRadius: '4px',
+                                    color: "white"
+                                }}
+                            >Waiting</Typography>
                         )
                             : (
                                 <Button size="small"

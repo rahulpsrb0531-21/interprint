@@ -100,7 +100,7 @@ export default function QuotationTable() {
     }, [])
 
     async function getQuotationList() {
-        const res = await clientServices.getQuotation(user?._id)
+        const res = await clientServices.getQuotation(user?.email)
         if (res && res.success) {
             console.log("res", res?.data)
             setQuotationList(res?.data)

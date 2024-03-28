@@ -199,7 +199,9 @@ export default function PrepressEnquiryTable() {
                                                             {enquiry?.phone}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {status}
+                                                            {/* {status} */}
+                                                            <Chip label={status}
+                                                                color={status === "Pending" ? "warning" : "success"} />
                                                         </TableCell>
                                                     </TableRow>
                                                 )

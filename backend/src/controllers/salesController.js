@@ -102,42 +102,58 @@ const createQuotation = async (req, res) => {
     try {
         const { enquiry, note, date, amount, password } = req.body
         // console.log("1")
-        // console.log("2", enquiry, note, date, amount, password)
-        if (!enquiry || !note || !date || !amount || !password) throw customError.dataInvalid
+        console.log("2", enquiry)
+        if (!enquiry || !note || !date || !amount) throw customError.dataInvalid
         // first step 1  create client
         const userExits = await Client.findOne({ email: enquiry.email })
-        if (userExits) throw customError.userExists
-        const newClient = await Client.create({
-            email: enquiry.email,
-            password: password,
-            firstName: enquiry.firstName,
-            lastName: enquiry.lastName,
-            phone: enquiry.phone,
-            companyName: enquiry.companyName,
-            street: enquiry.companyAddress.street,
-            city: enquiry.companyAddress.city,
-            state: enquiry.companyAddress.state,
-            zip: enquiry.companyAddress.zip,
-            country: enquiry.companyAddress.country,
-            requirements: enquiry.requirements,
-            navConfig: clientNav
-        })
+        if (userExits) {
+            const newQuotation = Quotation({
+                enquiry: enquiry,
+                note,
+                date,
+                amount
+            })
+            await newQuotation.save()
 
-        const newQuotation = Quotation({
-            enquiry: newClient,
-            note,
-            date,
-            amount
-        })
+            res.status(200).json({
+                success: true,
+                data: newQuotation,
+                message: 'Created Quotation successfully',
+            })
 
-        await newQuotation.save()
-        sendEmailWithLoginCredential(enquiry.email, password)
+        } else {
 
-        res.status(200).json({
-            success: true,
-            data: newQuotation,
-            message: 'Created Quotation successfully',
-        })
+            const newClient = await Client.create({
+                email: enquiry.email,
+                password: password,
+                firstName: enquiry.firstName,
+                lastName: enquiry.lastName,
+                phone: enquiry.phone,
+                companyName: enquiry.companyName,
+                street: enquiry.companyAddress.street,
+                city: enquiry.companyAddress.city,
+                state: enquiry.companyAddress.state,
+                zip: enquiry.companyAddress.zip,
+                country: enquiry.companyAddress.country,
+                requirements: enquiry.requirements,
+                navConfig: clientNav
+            })
+            const newQuotation = Quotation({
+                enquiry: newClient,
+                note,
+                date,
+                amount
+            })
+
+            await newQuotation.save()
+            sendEmailWithLoginCredential(enquiry.email, password)
+
+            res.status(200).json({
+                success: true,
+                data: newQuotation,
+                message: 'Created Quotation successfully',
+            })
+        }
 
     } catch (error) {
         console.log(`***** ERROR : ${req.originalUrl, error} error`);
@@ -148,59 +164,63 @@ const createQuotation = async (req, res) => {
         });
     }
 }
+
+
 // @desc    Create Quotation with Existing client
 // @route   POST /api/sales/create/quotation
 // @access  Private
-const createQuotationWithExistClient = async (req, res) => {
-    try {
-        const { enquiry, note, date, amount, password } = req.body
-        // console.log("1")
-        // console.log("2", enquiry, note, date, amount, password)
-        if (!enquiry || !note || !date || !amount || !password) throw customError.dataInvalid
-        // first step 1  create client
-        const userExits = await Client.findOne({ email: enquiry.email })
-        if (userExits) throw customError.userExists
-        const newClient = await Client.create({
-            email: enquiry.email,
-            password: password,
-            firstName: enquiry.firstName,
-            lastName: enquiry.lastName,
-            phone: enquiry.phone,
-            companyName: enquiry.companyName,
-            street: enquiry.companyAddress.street,
-            city: enquiry.companyAddress.city,
-            state: enquiry.companyAddress.state,
-            zip: enquiry.companyAddress.zip,
-            country: enquiry.companyAddress.country,
-            requirements: enquiry.requirements,
-            navConfig: clientNav
-        })
+// const createQuotationWithExistClient = async (req, res) => {
+//     try {
+//         const { enquiry, note, date, amount, password } = req.body
+//         // console.log("1")
+//         // console.log("2", enquiry, note, date, amount, password)
+//         if (!enquiry || !note || !date || !amount || !password) throw customError.dataInvalid
+//         // first step 1  create client
+//         const userExits = await Client.findOne({ email: enquiry.email })
+//         if (userExits) throw customError.userExists
+//         const newClient = await Client.create({
+//             email: enquiry.email,
+//             password: password,
+//             firstName: enquiry.firstName,
+//             lastName: enquiry.lastName,
+//             phone: enquiry.phone,
+//             companyName: enquiry.companyName,
+//             street: enquiry.companyAddress.street,
+//             city: enquiry.companyAddress.city,
+//             state: enquiry.companyAddress.state,
+//             zip: enquiry.companyAddress.zip,
+//             country: enquiry.companyAddress.country,
+//             requirements: enquiry.requirements,
+//             navConfig: clientNav
+//         })
 
-        const newQuotation = Quotation({
-            enquiry: newClient,
-            note,
-            date,
-            amount
-        })
+//         const newQuotation = Quotation({
+//             enquiry: newClient,
+//             note,
+//             date,
+//             amount
+//         })
 
-        await newQuotation.save()
-        sendEmailWithLoginCredential(enquiry.email, password)
+//         await newQuotation.save()
+//         sendEmailWithLoginCredential(enquiry.email, password)
 
-        res.status(200).json({
-            success: true,
-            data: newQuotation,
-            message: 'Created Quotation successfully',
-        })
+//         res.status(200).json({
+//             success: true,
+//             data: newQuotation,
+//             message: 'Created Quotation successfully',
+//         })
 
-    } catch (error) {
-        console.log(`***** ERROR : ${req.originalUrl, error} error`);
-        res.status(200).json({
-            success: false,
-            // data: error,
-            data: error,
-        });
-    }
-}
+//     } catch (error) {
+//         console.log(`***** ERROR : ${req.originalUrl, error} error`);
+//         res.status(200).json({
+//             success: false,
+//             // data: error,
+//             data: error,
+//         });
+//     }
+// }
+
+
 
 // @desc    Get All Quotation 
 // @route   GET /api/sales/get-all/quotation

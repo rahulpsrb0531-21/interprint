@@ -14,11 +14,13 @@ import { LoadingButton } from "@mui/lab"
 import Iconify from "../../components/Iconify";
 import salesServices from "../../services/salesServices";
 import { generatePassword } from "../../utils/function";
+import clientServices from "../../services/clientServices";
 
 export default function CreateQuotationAndClient() {
     const navigate = useNavigate()
+    const [existenceClient, setExistenceClient] = useState(false)
     const { state } = useLocation()
-    // console.log('state', state)
+    console.log('state', state)
 
     const [selectedDate, setSelectedDate] = useState(null);
 
@@ -38,7 +40,7 @@ export default function CreateQuotationAndClient() {
         country: Yup.string().required("Country is required"),
         requirements: Yup.string().required("Requirements is required"),
         // Quotation data 
-        password: Yup.string().required("Password is required"),
+        password: Yup.string(),
         note: Yup.string().required("Note is required"),
         date: Yup.string(),
         amount: Yup.number().required("Amount is required"),
@@ -91,6 +93,31 @@ export default function CreateQuotationAndClient() {
             createQuotation(data)
         }
     })
+
+    async function checkClientExist() {
+        const res = await clientServices.checkByEmailIdClientExist(state?.email)
+        console.log("res>>>>>>>>", res)
+        setSubmitting(false)
+        if (res && res.success) {
+            setExistenceClient(res?.existence)
+            // enqueueSnackbar(res?.message, {
+            //     variant: "success",
+            //     anchorOrigin: { horizontal: "right", vertical: "top" },
+            //     autoHideDuration: 1000
+            // })
+        } else {
+            // enqueueSnackbar(res?.data || "server error", {
+            //     variant: "error",
+            //     anchorOrigin: { horizontal: "right", vertical: "top" }, autoHideDuration: 1000
+            // })
+        }
+    }
+
+    useEffect(() => {
+        if (state) {
+            checkClientExist()
+        }
+    }, [])
 
 
     async function createQuotation(data) {
@@ -362,65 +389,70 @@ export default function CreateQuotationAndClient() {
                             {/* </Box> */}
                         </Stack>
 
-                        <Stack spacing={2} >
-                            <Typography
-                                sx={{ fontSize: 20, fontWeight: 600 }}
-                            >Login Credential</Typography>
-                            <Stack spacing={2} >
-                                <TextField
-                                    //size="small"
-                                    sx={{
-                                        ".MuiInputBase-root": {
-                                            borderRadius: '4px',
-                                        },
-                                        '& > :not(style)': { m: 0 },
-                                        "& .MuiInputLabel-root": { fontSize: 15 },
-                                    }}
-                                    {...getFieldProps("email")}
-                                    error={Boolean(touched.email && errors.email)}
-                                    helperText={touched.email && errors.email}
-                                    label="Email*"
-                                />
+                        {
+                            existenceClient === false && (
                                 <Stack spacing={2} >
-                                    <TextField
-                                        //size="small"
-                                        sx={{
-                                            border: 'none',
-                                            background: '#F8F8F8 0% 0% no-repeat padding-box',
-                                            outline: 'none',
-                                            ".MuiInputBase-root": {
-                                                borderRadius: '4px',
-                                            },
-                                            '& > :not(style)': { m: 0 },
-                                            "& .MuiInputLabel-root": {
-                                                fontSize: 15
-                                            },
+                                    <Typography
+                                        sx={{ fontSize: 20, fontWeight: 600 }}
+                                    >Login Credential</Typography>
+                                    <Stack spacing={2} >
+                                        <TextField
+                                            //size="small"
+                                            sx={{
+                                                ".MuiInputBase-root": {
+                                                    borderRadius: '4px',
+                                                },
+                                                '& > :not(style)': { m: 0 },
+                                                "& .MuiInputLabel-root": { fontSize: 15 },
+                                            }}
+                                            {...getFieldProps("email")}
+                                            error={Boolean(touched.email && errors.email)}
+                                            helperText={touched.email && errors.email}
+                                            label="Email*"
+                                        />
+                                        <Stack spacing={2} >
+                                            <TextField
+                                                //size="small"
+                                                sx={{
+                                                    border: 'none',
+                                                    background: '#F8F8F8 0% 0% no-repeat padding-box',
+                                                    outline: 'none',
+                                                    ".MuiInputBase-root": {
+                                                        borderRadius: '4px',
+                                                    },
+                                                    '& > :not(style)': { m: 0 },
+                                                    "& .MuiInputLabel-root": {
+                                                        fontSize: 15
+                                                    },
 
-                                        }}
-                                        autoComplete="current-password"
-                                        label="Password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        {...getFieldProps('password')}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton onClick={handleShowPassword} edge="end">
-                                                        <Iconify
-                                                            // sx={{ width: 12, height: 12 }}
-                                                            icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                        error={Boolean(touched.password && errors.password)}
-                                        helperText={touched.password && errors.password}
-                                    />
-                                    <Button variant="contained"
-                                        onClick={() => setFieldValue("password", generatePassword(12))}
-                                    >Generate Password</Button>
+                                                }}
+                                                autoComplete="current-password"
+                                                label="Password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                {...getFieldProps('password')}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton onClick={handleShowPassword} edge="end">
+                                                                <Iconify
+                                                                    // sx={{ width: 12, height: 12 }}
+                                                                    icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
+                                                error={Boolean(touched.password && errors.password)}
+                                                helperText={touched.password && errors.password}
+                                            />
+                                            <Button variant="contained"
+                                                onClick={() => setFieldValue("password", generatePassword(12))}
+                                            >Generate Password</Button>
+                                        </Stack>
+                                    </Stack>
                                 </Stack>
-                            </Stack>
-                        </Stack>
+                            )
+                        }
+
 
                         <Stack spacing={2} >
                             <Typography sx={{ fontSize: 20, fontWeight: 600 }} >Quotation Details</Typography>

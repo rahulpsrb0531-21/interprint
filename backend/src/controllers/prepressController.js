@@ -71,12 +71,12 @@ const getAllEnquiry = async (req, res) => {
 // @access  Private
 const updateUps = async (req, res) => {
     try {
-        const { id, ups, email } = req.body
+        const { id, ups } = req.body
 
-        if (!id || !ups || !email) throw customError.dataInvalid
+        if (!id || !ups) throw customError.dataInvalid
 
         // // first step 1  create client
-        const clientExist = await Client.findOne({ email: email })
+        // const clientExist = await Client.findOne({ email: email })
         // console.log("2", userExits)
         // if (userExits) throw customError.userExists
 
@@ -86,36 +86,22 @@ const updateUps = async (req, res) => {
         //     { new: true }
         // )
 
-        if (clientExist) {
-            const updateEnquiry = await Enquiry.findOneAndUpdate(
-                { _id: id },
-                { $set: { ups: ups, status: "Ups Updated", existenceStatus: "Client Exist" } },
-                { new: true }
-            )
-            res.status(200).json({
-                success: true,
-                message: 'Updated Ups successfully',
-            })
+        const updateEnquiry = await Enquiry.findOneAndUpdate(
+            { _id: id },
+            { $set: { ups: ups, status: "Ups Updated" } },
+            { new: true }
+        )
+        const updatePrepressEnquiry = await Prepress.findOneAndUpdate(
+            { "enquiry._id": id },
+            { $set: { enquiry: updateEnquiry, status: "Ups Updated" } },
+            { new: true }
+        )
 
-        } else {
-            const updateEnquiry = await Enquiry.findOneAndUpdate(
-                { _id: id },
-                { $set: { ups: ups, status: "Ups Updated", existenceStatus: "New Client" } },
-                { new: true }
-            )
-            const updatePrepressEnquiry = await Prepress.findOneAndUpdate(
-                { "enquiry._id": id },
-                { $set: { enquiry: updateEnquiry, status: "Ups Updated" } },
-                { new: true }
-            )
-            // console.log("updateEnquiry", updateEnquiry)
-            // sendEmailWithLoginCredential(enquiry.email, password)
-            res.status(200).json({
-                success: true,
-                message: 'Updated Ups successfully',
-            })
-        }
-
+        // sendEmailWithLoginCredential(enquiry.email, password)
+        res.status(200).json({
+            success: true,
+            message: 'Updated Ups successfully',
+        })
 
     } catch (error) {
         console.log(`***** ERROR : ${req.originalUrl, error} error`);

@@ -138,7 +138,12 @@ export default function EnquiryTable() {
 
     return (
         <Container maxWidth="lg">
-            <Typography sx={{ pb: 2, fontSize: 28, fontWeight: 700 }} >Enquiry Lists</Typography>
+            <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} >
+                <Typography sx={{ pb: 2, fontSize: 28, fontWeight: 700 }} >Enquiry Lists</Typography>
+                <Button variant="contained"
+                    onClick={() => navigate("/client/create/new/enquiy")}
+                >Create Enquiry</Button>
+            </Stack>
             <Grid container>
                 <Grid item xs={12} md={12} lg={12}>
                     <Card

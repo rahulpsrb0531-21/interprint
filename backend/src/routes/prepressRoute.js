@@ -6,4 +6,5 @@ router.post('/login', Login)
 router.get('/all/enquiry', getAllEnquiry)
 router.post('/update/ups', updateUps)
 
+
 export default router

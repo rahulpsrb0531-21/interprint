@@ -198,7 +198,11 @@ export default function EnquiryTable() {
                                                             {phone}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {status}
+                                                            {/* {status} */}
+                                                            <Chip
+                                                                label={status}
+                                                                color={status === "Pending" ? "warning" : status === "Sent to Prepress" ? "primary" : "success"}
+                                                            />
                                                         </TableCell>
                                                     </TableRow>
                                                 )

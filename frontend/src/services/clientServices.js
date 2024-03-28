@@ -1,7 +1,17 @@
 import { server } from '../utils/server'
 
-const getQuotation = (id) => {
-    return server.get(`api/client/quotation/${id}`)
+const getQuotation = (email) => {
+    return server.get(`api/client/quotation/${email}`)
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            return null
+        })
+}
+
+const checkByEmailIdClientExist = (email) => {
+    return server.get(`api/client/existence/${email}`)
         .then(res => {
             return res.data
         })
@@ -23,6 +33,6 @@ const getAllEnquiryByUserId = (data) => {
 
 
 const clientServices = {
-    getQuotation, getAllEnquiryByUserId
+    getQuotation, getAllEnquiryByUserId, checkByEmailIdClientExist
 }
 export default clientServices
