@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Button, FormControl, FormHelperText, MenuItem, Stack, TextField, Typography } from "@mui/material"
 import * as Yup from "yup"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useSnackbar } from "notistack"
 import { useDispatch, useSelector } from "react-redux"
 import { useFormik, Form, FormikProvider } from "formik"
@@ -180,6 +180,11 @@ export default function Login() {
                                 </Button>
                             </AnimateButton>
                         </Box>
+                        <Typography>Already a client?
+                            <Link to={'/client/login'} >
+                                Log In
+                            </Link>
+                        </Typography>
                     </Stack>
                 </Stack>
             </Form>
