@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/static/js/main.152fbd69.js",
+    "main.js": "/static/js/main.05483986.js",
     "static/media/user-round.svg": "/static/media/user-round.27fe79b102ea6aad2f60e66cff82818d.svg",
     "static/media/Man-thinking-rafiki.svg": "/static/media/Man-thinking-rafiki.a078f4ffcc122c1a17d4f1d5f4beca15.svg",
     "index.html": "/index.html",
-    "main.152fbd69.js.map": "/static/js/main.152fbd69.js.map"
+    "main.05483986.js.map": "/static/js/main.05483986.js.map"
   },
   "entrypoints": [
-    "static/js/main.152fbd69.js"
+    "static/js/main.05483986.js"
   ]
 }
