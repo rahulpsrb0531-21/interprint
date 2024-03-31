@@ -43,6 +43,7 @@ const registerClient = async (req, res) => {
     }
 }
 
+
 // @desc    Register Sales
 // @route   POST /api/sales/register
 // @access  Private
